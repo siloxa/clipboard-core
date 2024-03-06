@@ -34,8 +34,8 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/clipboard
-    username: clipboard
-    password:
+    username: cb_dbuser
+    password: ym39hSrWH5NwJuYDqsLpCQ
     hikari:
       poolName: Hikari
       auto-commit: false
