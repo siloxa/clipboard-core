@@ -1,0 +1,1 @@
+org.springframework.test.context.ContextCustomizerFactory = tech.siloxa.clipboard.config.TestContainersSpringContextCustomizerFactory
