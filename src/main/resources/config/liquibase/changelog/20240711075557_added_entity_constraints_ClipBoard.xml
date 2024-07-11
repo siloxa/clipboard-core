@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity ClipBoard.
+    -->
+    <changeSet id="20240711075557-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="work_space_id"
+                                 baseTableName="clip_board"
+                                 constraintName="fk_clip_board__work_space_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_space"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,15 @@
+entity WorkSpace {
+    name String
+}
+
+entity ClipBoard {
+    content String
+}
+
+relationship OneToMany {
+    WorkSpace to ClipBoard
+}
+
+relationship ManyToMany {
+    WorkSpace to User
+}

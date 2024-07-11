@@ -48,6 +48,10 @@ public class CacheConfiguration {
             createCache(cm, tech.siloxa.clipboard.domain.User.class.getName());
             createCache(cm, tech.siloxa.clipboard.domain.Authority.class.getName());
             createCache(cm, tech.siloxa.clipboard.domain.User.class.getName() + ".authorities");
+            createCache(cm, tech.siloxa.clipboard.domain.WorkSpace.class.getName());
+            createCache(cm, tech.siloxa.clipboard.domain.WorkSpace.class.getName() + ".clipBoards");
+            createCache(cm, tech.siloxa.clipboard.domain.WorkSpace.class.getName() + ".users");
+            createCache(cm, tech.siloxa.clipboard.domain.ClipBoard.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

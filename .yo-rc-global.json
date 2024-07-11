@@ -1,5 +1,5 @@
 {
-  "generator-jhipster:7.9.3": {
+  "generator-jhipster:7.9.4": {
     "promptValues": {
       "packageName": "tech.siloxa.clipboard",
       "nativeLanguage": "en"

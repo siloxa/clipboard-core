@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity WorkSpace.
+    -->
+    <changeSet id="20240711075556-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="work_space_id"
+                                 baseTableName="rel_work_space__user"
+                                 constraintName="fk_rel_work_space__user__work_space_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_space"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="rel_work_space__user"
+                                 constraintName="fk_rel_work_space__user__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+    </changeSet>
+</databaseChangeLog>

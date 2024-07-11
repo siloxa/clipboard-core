@@ -1,0 +1,27 @@
+{
+  "applications": "*",
+  "changelogDate": "20240711075557",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "clip_board",
+  "fields": [
+    {
+      "fieldName": "content",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ClipBoard",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "workSpace",
+      "otherEntityRelationshipName": "clipBoard",
+      "relationshipName": "workSpace",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

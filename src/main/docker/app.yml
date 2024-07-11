@@ -9,21 +9,20 @@ services:
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:postgresql://clipboard-postgresql:5432/clipboard
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://clipboard-postgresql:5432/clipboard
-      - JHIPSTER_SLEEP=10 # gives time for other services to boot before the application
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:8888:8080
+      - 127.0.0.1:8080:8080
   clipboard-postgresql:
     image: postgres:14.5
-    volumes:
-       - ~/volumes/jhipster/clipboard/postgresql/:/var/lib/postgresql/data/
+    # volumes:
+    #   - ~/volumes/jhipster/clipboard/postgresql/:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=clipboard
-      - POSTGRES_USER=cb_dbuser
-      - POSTGRES_PASSWORD=ym39hSrWH5NwJuYDqsLpCQ
+      - POSTGRES_USER=clipboard
+      - POSTGRES_PASSWORD=
       - POSTGRES_HOST_AUTH_METHOD=trust
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:5438:5432
+      - 127.0.0.1:5432:5432

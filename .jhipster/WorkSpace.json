@@ -1,0 +1,34 @@
+{
+  "applications": "*",
+  "changelogDate": "20240711075556",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "work_space",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "WorkSpace",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "clipBoard",
+      "otherEntityRelationshipName": "workSpace",
+      "relationshipName": "clipBoard",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "workSpace",
+      "ownerSide": true,
+      "relationshipName": "user",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "no"
+}
