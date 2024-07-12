@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 import tech.siloxa.clipboard.config.Constants;
 import tech.siloxa.clipboard.domain.Authority;
 import tech.siloxa.clipboard.domain.User;
+import tech.siloxa.clipboard.domain.enumeration.Language;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -19,27 +20,17 @@ public class AdminUserDTO implements Serializable {
     private Long id;
 
     @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    private String login;
-
-    @Size(max = 50)
-    private String firstName;
-
-    @Size(max = 50)
-    private String lastName;
-
     @Email
     @Size(min = 5, max = 254)
     private String email;
 
+    @Size(max = 50)
+    private String name;
+
     @Size(max = 256)
     private String imageUrl;
 
-    private boolean activated = false;
-
-    @Size(min = 2, max = 10)
-    private String langKey;
+    private Language language;
 
     private String createdBy;
 
@@ -57,13 +48,10 @@ public class AdminUserDTO implements Serializable {
 
     public AdminUserDTO(User user) {
         this.id = user.getId();
-        this.login = user.getLogin();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
+        this.name = user.getName();
         this.email = user.getEmail();
-        this.activated = user.isActivated();
         this.imageUrl = user.getImageUrl();
-        this.langKey = user.getLangKey();
+        this.language = user.getLanguage();
         this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
@@ -79,28 +67,20 @@ public class AdminUserDTO implements Serializable {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getName() {
+        return name;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public Language getLanguage() {
+        return language;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public String getEmail() {
@@ -117,22 +97,6 @@ public class AdminUserDTO implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getLangKey() {
-        return langKey;
-    }
-
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
     }
 
     public String getCreatedBy() {
@@ -179,13 +143,10 @@ public class AdminUserDTO implements Serializable {
     @Override
     public String toString() {
         return "AdminUserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
+            "name='" + name + '\'' +
             ", email='" + email + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
+            ", language='" + language + '\'' +
             ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +

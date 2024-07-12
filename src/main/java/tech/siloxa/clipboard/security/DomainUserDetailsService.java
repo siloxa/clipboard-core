@@ -1,8 +1,5 @@
 package tech.siloxa.clipboard.security;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.siloxa.clipboard.domain.Authority;
 import tech.siloxa.clipboard.domain.User;
 import tech.siloxa.clipboard.repository.UserRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Authenticate a user from the database.
@@ -35,30 +35,19 @@ public class DomainUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
 
-        if (new EmailValidator().isValid(login, null)) {
-            return userRepository
-                .findOneWithAuthoritiesByEmailIgnoreCase(login)
-                .map(user -> createSpringSecurityUser(login, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
-        }
-
-        String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         return userRepository
-            .findOneWithAuthoritiesByLogin(lowercaseLogin)
-            .map(user -> createSpringSecurityUser(lowercaseLogin, user))
-            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
+            .findOneWithAuthoritiesByEmailIgnoreCase(login)
+            .map(this::createSpringSecurityUser)
+            .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-        if (!user.isActivated()) {
-            throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
-        }
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(User user) {
         List<GrantedAuthority> grantedAuthorities = user
             .getAuthorities()
             .stream()
             .map(Authority::getName)
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
     }
 }

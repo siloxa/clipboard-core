@@ -6,8 +6,9 @@ services:
     # volumes:
     #   - ~/volumes/jhipster/clipboard/postgresql/:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=clipboard
-      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=clipboard
+      - POSTGRES_USER=cb_dbuser
+      - POSTGRES_PASSWORD=ym39hSrWH5NwJuYDqsLpCQ
       - POSTGRES_HOST_AUTH_METHOD=trust
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix

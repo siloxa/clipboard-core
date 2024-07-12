@@ -43,7 +43,6 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
-            createCache(cm, tech.siloxa.clipboard.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, tech.siloxa.clipboard.repository.UserRepository.USERS_BY_EMAIL_CACHE);
             createCache(cm, tech.siloxa.clipboard.domain.User.class.getName());
             createCache(cm, tech.siloxa.clipboard.domain.Authority.class.getName());

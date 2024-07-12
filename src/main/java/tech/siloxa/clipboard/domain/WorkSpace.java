@@ -28,6 +28,9 @@ public class WorkSpace implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @OneToOne
+    private User user;
+
     @OneToMany(mappedBy = "workSpace")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "workSpace" }, allowSetters = true)
@@ -68,6 +71,19 @@ public class WorkSpace implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public WorkSpace user(User user) {
+        this.setUser(user);
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Set<ClipBoard> getClipBoards() {

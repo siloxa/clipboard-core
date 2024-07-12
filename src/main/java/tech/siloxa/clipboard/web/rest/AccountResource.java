@@ -1,6 +1,7 @@
 package tech.siloxa.clipboard.web.rest;
 
 import java.util.*;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -35,17 +36,14 @@ public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
-    private final UserRepository userRepository;
+    @Resource
+    private UserRepository userRepository;
 
-    private final UserService userService;
+    @Resource
+    private UserService userService;
 
-    private final MailService mailService;
-
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
-        this.userRepository = userRepository;
-        this.userService = userService;
-        this.mailService = mailService;
-    }
+    @Resource
+    private MailService mailService;
 
     /**
      * {@code POST  /register} : register the user.
@@ -63,20 +61,6 @@ public class AccountResource {
         }
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
-    }
-
-    /**
-     * {@code GET  /activate} : activate the registered user.
-     *
-     * @param key the activation key.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
-     */
-    @GetMapping("/activate")
-    public void activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> user = userService.activateRegistration(key);
-        if (!user.isPresent()) {
-            throw new AccountResourceException("No user was found for this activation key");
-        }
     }
 
     /**
@@ -114,22 +98,21 @@ public class AccountResource {
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
-        String userLogin = SecurityUtils
-            .getCurrentUserLogin()
-            .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        String userEmail = SecurityUtils
+            .getCurrentUserEmail()
+            .orElseThrow(() -> new AccountResourceException("Current user email not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
+        if (existingUser.isPresent() && (!existingUser.get().getEmail().equalsIgnoreCase(userEmail))) {
             throw new EmailAlreadyUsedException();
         }
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase(userEmail);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(
-            userDTO.getFirstName(),
-            userDTO.getLastName(),
+            userDTO.getName(),
             userDTO.getEmail(),
-            userDTO.getLangKey(),
+            userDTO.getLanguage(),
             userDTO.getImageUrl()
         );
     }
