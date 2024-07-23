@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import tech.jhipster.security.RandomUtil;
 import tech.siloxa.clipboard.config.Constants;
 import tech.siloxa.clipboard.domain.Authority;
@@ -49,6 +50,12 @@ public class UserService {
     @Resource
     private CacheManager cacheManager;
 
+    @Resource
+    private PeoplifyService peoplifyService;
+
+    @Resource
+    private DocumentStoreService documentStoreService;
+
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository
@@ -86,7 +93,7 @@ public class UserService {
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setName(userDTO.getName());
-        newUser.setImageUrl(userDTO.getImageUrl());
+        newUser.setImageUrl(peoplifyService.randomAvatar());
         if (userDTO.getLanguage() == null) {
             newUser.setLanguage(Constants.DEFAULT_LANGUAGE); // default language
         } else {
@@ -188,6 +195,19 @@ public class UserService {
                 user.setLanguage(language);
                 user.setImageUrl(imageUrl);
                 this.clearUserCaches(user);
+                log.debug("Changed Information for User: {}", user);
+            });
+    }
+
+    public void updateImage(final MultipartFile image) {
+        SecurityUtils
+            .getCurrentUserEmail()
+            .flatMap(userRepository::findOneByEmailIgnoreCase)
+            .ifPresent(user -> {
+                if (documentStoreService.removeDocument(user.getImageUrl())) {
+                    final String fileName = documentStoreService.storeDocument(image);
+                    user.setImageUrl(fileName);
+                }
                 log.debug("Changed Information for User: {}", user);
             });
     }

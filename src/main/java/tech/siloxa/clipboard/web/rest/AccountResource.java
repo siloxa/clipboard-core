@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tech.siloxa.clipboard.domain.User;
 import tech.siloxa.clipboard.repository.UserRepository;
 import tech.siloxa.clipboard.security.SecurityUtils;
@@ -60,7 +61,7 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
+//        mailService.sendActivationEmail(user);
     }
 
     /**
@@ -115,6 +116,22 @@ public class AccountResource {
             userDTO.getLanguage(),
             userDTO.getImageUrl()
         );
+    }
+
+    @PostMapping("/account/image")
+    public void saveImage(@Valid @RequestBody AdminUserDTO userDTO, @RequestParam(value = "image") MultipartFile image) {
+        String userEmail = SecurityUtils
+            .getCurrentUserEmail()
+            .orElseThrow(() -> new AccountResourceException("Current user email not found"));
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getEmail().equalsIgnoreCase(userEmail))) {
+            throw new EmailAlreadyUsedException();
+        }
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase(userEmail);
+        if (!user.isPresent()) {
+            throw new AccountResourceException("User could not be found");
+        }
+        userService.updateImage(image);
     }
 
     /**
