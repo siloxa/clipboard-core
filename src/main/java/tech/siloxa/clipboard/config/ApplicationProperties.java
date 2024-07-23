@@ -19,7 +19,15 @@ public class ApplicationProperties {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getCdn() {
         return cdn;
+    }
+
+    public void setCdn(String cdn) {
+        this.cdn = cdn;
     }
 }
