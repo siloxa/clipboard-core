@@ -13,9 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
+import tech.siloxa.clipboard.domain.User;
 import tech.siloxa.clipboard.domain.WorkSpace;
 import tech.siloxa.clipboard.repository.WorkSpaceRepository;
+import tech.siloxa.clipboard.service.UserService;
 import tech.siloxa.clipboard.web.rest.errors.BadRequestAlertException;
+
+import javax.annotation.Resource;
 
 /**
  * REST controller for managing {@link tech.siloxa.clipboard.domain.WorkSpace}.
@@ -32,11 +36,11 @@ public class WorkSpaceResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final WorkSpaceRepository workSpaceRepository;
+    @Resource
+    private WorkSpaceRepository workSpaceRepository;
 
-    public WorkSpaceResource(WorkSpaceRepository workSpaceRepository) {
-        this.workSpaceRepository = workSpaceRepository;
-    }
+    @Resource
+    private UserService userService;
 
     /**
      * {@code POST  /work-spaces} : Create a new workSpace.
@@ -144,12 +148,13 @@ public class WorkSpaceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of workSpaces in body.
      */
     @GetMapping("/work-spaces")
-    public List<WorkSpace> getAllWorkSpaces(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<WorkSpace> getAllWorkSpacesOfCurrentUser(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all WorkSpaces");
+        final User currentUser = userService.getUserWithAuthorities().orElseThrow();
         if (eagerload) {
-            return workSpaceRepository.findAllWithEagerRelationships();
+            return workSpaceRepository.findAllWithEagerRelationshipsByUser(currentUser);
         } else {
-            return workSpaceRepository.findAll();
+            return workSpaceRepository.findAllByUser(currentUser);
         }
     }
 
