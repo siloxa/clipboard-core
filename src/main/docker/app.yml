@@ -3,6 +3,8 @@ version: '3.8'
 services:
   clipboard-app:
     image: clipboard
+    volumes:
+      - /opt/clipboard:/opt/clipboard
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
@@ -18,7 +20,6 @@ services:
     image: postgres:14.5
     volumes:
       - ~/volumes/jhipster/clipboard/postgresql/:/var/lib/postgresql/data/
-      - /opt/clipboard:/opt/clipboard
     environment:
       - POSTGRES_DB=clipboard
       - POSTGRES_USER=cb_dbuser
